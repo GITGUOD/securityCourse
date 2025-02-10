@@ -1,11 +1,12 @@
 import java.util.*;
+import java.math.*;
 
 public class MillerRabin {
     private Random rand;
     private int iterations;
     private boolean composit;
 
-    public MillerRabin(int n, int iterations) {
+    public MillerRabin(BigInteger n, int iterations) {
         rand = new Random();
         this.iterations = iterations;
         composit = false;
@@ -17,6 +18,60 @@ public class MillerRabin {
 //RSA
 
     //millerRabinTest
+    public boolean primeTest(BigInteger n) {
+
+        
+        if(n.equals(BigInteger.TWO) || n.equals(BigInteger.valueOf(3))) {
+            return true;
+        } else if (n.compareTo(BigInteger.ONE) <= 0 || n.mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
+            return false;
+        }
+        
+        BigInteger testPrime = n.subtract(BigInteger.ONE);
+        
+        //Starta med exponenten 0
+        int[] resultsOfFindingMandK = findMAndK(testPrime, 0);
+        BigInteger m = BigInteger.valueOf(resultsOfFindingMandK[0]);
+        int k = resultsOfFindingMandK[1];
+        
+        //Miller-rabinTest med många iterationer
+        //a ska vara större än 2 men mindre än n-2
+
+        for(int i = 0; i < iterations; i++) {
+
+            BigInteger randomValueToA = new BigInteger(n.subtract(BigInteger.valueOf(3), rand));
+            BigInteger a = BigInteger.TWO.add(n.subtract(BigInteger.valueOf(3)));
+            BigInteger x = a.modPow(m, n);
+
+        
+        if(x == 1 || x == n-1) {
+            continue;
+        }
+            composit = true;
+
+            for(int j = 0; j < k - 1; j++) {
+                x = (int) Math.pow(2, a) % n;
+                if(x == 1) {
+                    composit = false;
+                    break;
+                }
+            } 
+            //composit är den
+        }
+
+        return composit;
+    }
+
+    private int[] findMAndK(BigInteger m, int expAlsoKnownAsK) {
+        if (m.mod(BigInteger.TWO).equals(BigInteger.ONE)) {  // Om m är udda, returnera m och k
+            return new int[]{m.intValue(), expAlsoKnownAsK};
+        }
+        return findMAndK(m.divide(BigInteger.TWO), expAlsoKnownAsK + 1); // Annars, fortsätt rekursivt dela med 2
+        //och öka k tills vi har hittat de rätta m och k
+    }
+    
+    /*
+     *   //millerRabinTest
     public boolean primeTest(int n) {
 
         
@@ -48,7 +103,7 @@ public class MillerRabin {
 
             for(int j = 0; j < k - 1; j++) {
                 x = (int) Math.pow(2, a) % n;
-                if(x == n-1) {
+                if(x == 1) {
                     composit = false;
                     break;
                 }
@@ -58,8 +113,8 @@ public class MillerRabin {
 
         return composit;
     }
-
-    private int[] findMAndK(int m, int expAlsoKnownAsK) {
+     * 
+     * private int[] findMAndK(int m, int expAlsoKnownAsK) {
         if (m % 2 == 1) {  // Om m är udda, returnera m och k
             return new int[]{m, expAlsoKnownAsK};
         }
@@ -67,6 +122,7 @@ public class MillerRabin {
         //och öka k tills vi har hittat de rätta m och k
     }
     
+     */
 
     //whole numbers vilket innbär integers enligt https://www.youtube.com/watch?v=qdylJqXCDGs
     // alltså k och m

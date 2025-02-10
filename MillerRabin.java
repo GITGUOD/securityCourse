@@ -2,10 +2,14 @@ import java.util.*;
 
 public class MillerRabin {
     private Random rand;
+    private int iterations;
+    private boolean composit;
 
-    public MillerRabin(int n) {
+    public MillerRabin(int n, int iterations) {
         rand = new Random();
-        
+        this.iterations = iterations;
+        composit = false;
+
         primeTest(n);
 
     }
@@ -14,6 +18,7 @@ public class MillerRabin {
 
     //millerRabinTest
     public boolean primeTest(int n) {
+
         
         if(n == 2 || n == 3) {
             return true;
@@ -28,23 +33,30 @@ public class MillerRabin {
         int m = resultsOfFindingMandK[0];
         int k = resultsOfFindingMandK[1];
         
-        //Miller-rabinTest
+        //Miller-rabinTest med många iterationer
         //a ska vara större än 2 men mindre än n-2
+
+        for(int i = 0; i < iterations; i++) {
         int a =  2 + rand.nextInt(n-3);
             
         int x = (int) Math.pow(a, m) % n;
         
-        if(x == 1 || x == -1) {
-            return true;
-        } else {
+        if(x == 1 || x == n-1) {
+            continue;
+        }
+            composit = true;
 
-            int nextAttempt = (int) Math.pow(x, a) % n;
-            if(nextAttempt == -1) {
-                return false;
+            for(int j = 0; j < k - 1; j++) {
+                x = (int) Math.pow(2, a) % n;
+                if(x == n-1) {
+                    composit = false;
+                    break;
+                }
             } 
             //composit är den
-            return false;
         }
+
+        return composit;
     }
 
     private int[] findMAndK(int m, int expAlsoKnownAsK) {

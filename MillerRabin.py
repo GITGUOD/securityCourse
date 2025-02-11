@@ -24,7 +24,7 @@ def miller_rabin_test(n, iterations):
 
         x = pow(a, m, n)  # compositen/primtalet <-> x = a^s mod n
 
-        #Om compositen eller primtalet bli detta, fortsätter vi till nästa steg
+        #Om compositen eller primtalet bli detta, fortsätter vi till nästa steg för att vara säkra eftersom vi kan bara ha haft otur med a
         if x == 1 or x == n - 1:
             continue
 
@@ -49,19 +49,34 @@ def find_m_and_k(m, exp_also_known_as_k):
     else:
         return find_m_and_k(m // 2, exp_also_known_as_k + 1) # // är heltals division
 
+def generatePrime(bits, nbrPrimes):
+    listOfPrimes = []
+    
+    while len(listOfPrimes) < (nbrPrimes):
+        potentialCandidates = random.getrandbits(bits)
+        if(miller_rabin_test(potentialCandidates, 100) == True):
+            listOfPrimes.append(potentialCandidates)
+    
+    print("Lista av genererade primtal", listOfPrimes)
+    print(len(listOfPrimes))
+    return listOfPrimes
 
-# Testa vår primtals funktion
+#Generera 100 primtal
 
-n = int(input("Vilket nummer vill du se är att ett primtal? "))
+generatePrime(512, 100)
+# Testa vår primtals funktion, vilken som
 
-iterations = 20
+# n = int(input("Vilket nummer vill du se är att ett primtal? "))
 
-result = miller_rabin_test(n, iterations)
+# iterations = 20
 
-if result == True:
-    print(f"{n} är sannorligen ett primtal")
-else:
-    print(f"{n} är nog inte ett primtal.")
+# result = miller_rabin_test(n, iterations)
+
+#if result == True:
+    #print(f"{n} är sannorligen ett primtal")
+#else:
+    #print(f"{n} är nog inte ett primtal.")
+
 
 
 

@@ -1,4 +1,5 @@
 import random
+import time
 
 
 #Primtal sannolikhets test, ju fler iteration ju större sannolikhet
@@ -11,9 +12,9 @@ def miller_rabin_test(n, iterations):
     # Kolla basfall då om talet n är 2 eller 3, då är det sannorligen ett primtal
     # Ett tal som är jämntdelbart eller är lika med 1 eller 0 är inte primtal
     if n == 2 or n == 3:
-        return True
+        return probablyPrime
     elif n < 2 or n % 2 == 0:
-        return False
+        return composite
 
     # n - 1 = 2^k * m, vi vill hitta m och k vilket är ekvivalent med s och r där s = m och k = r
     m, k = find_m_and_k(n - 1, 0)
@@ -28,7 +29,7 @@ def miller_rabin_test(n, iterations):
         if x == 1 or x == n - 1:
             continue
 
-        # Här så säger pseudo koden att det talet n förmodligen är ett primtal men vi sätter kompositen till sant för man vet aldrig och sedan gör ett extra koll
+        #Gör extra koll
         composite = True
         for _ in range(k - 1):
             x = pow(x, 2, n)  # x = x^2 % n, dubblar exponenten varje gång vi testar
@@ -39,7 +40,7 @@ def miller_rabin_test(n, iterations):
         if composite:
             return False  # Hittade en witness
 
-    return probablyPrime  # Ingen witness hittades, n är sannorliken primtal
+    return probablyPrime 
 
 # Rekursivt metod för att hitta m och k
 def find_m_and_k(m, exp_also_known_as_k):
@@ -51,19 +52,37 @@ def find_m_and_k(m, exp_also_known_as_k):
 
 def generatePrime(bits, nbrPrimes):
     listOfPrimes = []
-    
+    start_time = time.time()
     while len(listOfPrimes) < (nbrPrimes):
         potentialCandidates = random.getrandbits(bits)
         if(miller_rabin_test(potentialCandidates, 100) == True):
             listOfPrimes.append(potentialCandidates)
     
+    end_time = time.time()
     print("Lista av genererade primtal", listOfPrimes)
+    timeToExecute = end_time - start_time
+    print(timeToExecute)
+
     print(len(listOfPrimes))
     return listOfPrimes
 
+def generateTestPrime(nbrOfTests = 1000):
+    listOfPrimes = []
+    i = 0
+    for i in range(nbrOfTests):
+        if(miller_rabin_test(i, 100) == True):
+            listOfPrimes.append(i)
+            
+        i+=1
+    print("Lista av genererade primtal", listOfPrimes)
+
+    print(len(listOfPrimes))
+    return listOfPrimes
+
+generateTestPrime()
 #Generera 100 primtal
 
-generatePrime(512, 100)
+#generatePrime(2048, 100)
 # Testa vår primtals funktion, vilken som
 
 # n = int(input("Vilket nummer vill du se är att ett primtal? "))
@@ -80,4 +99,3 @@ generatePrime(512, 100)
 
 
 
-    

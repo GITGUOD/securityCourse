@@ -1,3 +1,4 @@
+import math
 import random
 import time
 
@@ -66,7 +67,23 @@ def generatePrime(bits, nbrPrimes):
     print(len(listOfPrimes))
     return listOfPrimes
 
+#Hitta p och Q
+def generate_Prime_For_RSA_Exponents(bits, nbrPrimes):
+    listOfPrimes = []
+
+    while len(listOfPrimes) < (nbrPrimes):
+        potentialCandidates = random.getrandbits(bits)
+        if(miller_rabin_test(potentialCandidates, 20) == True):
+            listOfPrimes.append(potentialCandidates)
+    q = listOfPrimes[0]
+    p = listOfPrimes[1]
+    print("Lista av genererade primtal", listOfPrimes)
+
+    return p,q
+
+# Testa primtalslistan angiven i uppgiften
 def generateTestPrime(nbrOfTests = 7920):
+    print("Starting generating")
     listOfPrimes = []
     i = 0
     for i in range(nbrOfTests):
@@ -78,6 +95,41 @@ def generateTestPrime(nbrOfTests = 7920):
 
     print(len(listOfPrimes))
     return listOfPrimes
+
+#Vad vi vet
+#Vi vet att e är ett fast tal
+# e =  3,5,7, or 2^16 + 1
+# e = a
+# d = e−1 (mod (p − 1)(q − 1))
+# m = (p-1)(q-1)
+# x such that a × x ≡ 1 (mod m)
+# //Find numbers u,v,d such that d=gcd(a,m)=m x u + a x v
+def findExponents():
+    p,q = generate_Prime_For_RSA_Exponents(512, 2)
+    m = (p-1) * (q-1)
+    randomValue = [3,5,7, 2**16+1]
+    e = random.choice(randomValue)
+    d = math.exp(-1) % m
+    return e, m, d
+
+def inverse_mod(m, a):
+    #Find numbers u,v,d such that d=gcd(a,m)=m x u + a x v
+
+    d1 = m
+    d2 = a
+    v1 = 0
+    v2 = 1
+
+    while (d2 != 0):
+        q = d1 // d2
+        t2 = v1 - q*v2
+        t3 = d1 - q*d2
+        v1 = v2; d1 = d2
+        v2 = t2; d2 = t3
+
+    v=v1
+    d=d1	
+
 
 #generateTestPrime()
 #Generera 100 primtal
@@ -95,7 +147,5 @@ generatePrime(4096, 100)
     #print(f"{n} är sannorligen ett primtal")
 #else:
     #print(f"{n} är nog inte ett primtal.")
-
-
 
 

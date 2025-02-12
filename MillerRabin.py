@@ -66,7 +66,7 @@ def generatePrime(bits, nbrPrimes):
     print(len(listOfPrimes))
     return listOfPrimes
 
-def generateTestPrime(nbrOfTests = 1000):
+def generateTestPrime(nbrOfTests = 7920):
     listOfPrimes = []
     i = 0
     for i in range(nbrOfTests):
@@ -79,10 +79,10 @@ def generateTestPrime(nbrOfTests = 1000):
     print(len(listOfPrimes))
     return listOfPrimes
 
-generateTestPrime()
+#generateTestPrime()
 #Generera 100 primtal
 
-#generatePrime(2048, 100)
+generatePrime(4096, 100)
 # Testa vår primtals funktion, vilken som
 
 # n = int(input("Vilket nummer vill du se är att ett primtal? "))

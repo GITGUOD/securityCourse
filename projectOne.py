@@ -106,6 +106,7 @@ def generateTestPrime(nbrOfTests = 7920):
 # x such that a × x ≡ 1 (mod m)
 # //Find numbers u,v,d such that d=gcd(a,m)=m x u + a x v
 
+# orelevant
 def greatest_common_divider_aka_gcd(m,a):
     
     if a != 0:
@@ -115,17 +116,26 @@ def greatest_common_divider_aka_gcd(m,a):
             
         return m
 
-def findExponents(a):
-    bits = 512
-    primes = 2
-    p,q = generate_Prime_For_RSA_Exponents(bits, primes) # Om vi vill generera random p, q primtal
-    # p = om vi vill ha bestämt
-    # q = ?
-    m = (p-1) * (q-1)
-    randomValue = [3,5,7, 2**16+1]
-    e = random.choice(randomValue)
+def findExponents(bits):
 
-    d = extended_euclidean_with_inverse_mod(m, a)
+    primes = 2
+    # p,q = generate_Prime_For_RSA_Exponents(bits, primes) # Om vi vill generera random p, q primtal
+    p = 2179718491501612441833817328375883435620635924535759732650338455028674600279328551254564909638324061112032844686907803823364483045640627651074588155126323
+    q = 1019888133180980018385639226956307469544252836639624261650619145840709943531335271857402182539188539679686942934422011898972632483366922612626187985182557
+    m = (p-1) * (q-1)
+    # Om vi vill ha random värde på e av dessa tal
+    # randomValue = [3,5,7, 2**16+1]
+    # e = random.choice(randomValue)
+    #Bestämt E
+    e = 2**16+1
+
+    d = extended_euclidean_with_inverse_mod(m, e)
+    print("e value")
+    print(e)
+    print("m value")
+    print(m)
+    print("d value")
+    print(d)
     return e, m, d
 
 def extended_euclidean_with_inverse_mod(m, a):
@@ -153,12 +163,18 @@ def extended_euclidean_with_inverse_mod(m, a):
                         # Thus we can always find a positive solution in the range 0 < v < m, to our problem
      
 
+findExponents(64)
+# e × d ≡ 1 mod m för att bekräfta det.
+# 3 x 222435085542683005284630252518380267 = 1 mod 333652628314024507926945378777570400
+# -> 6.6730526e+35 = 1 mod
+ 
+
 
 #generateTestPrime()
 #Generera 100 primtal
 
 #generatePrime(256, 100)
-generate_Prime_For_RSA_Exponents(512, 2)
+#generate_Prime_For_RSA_Exponents(512, 2)
 # Testa vår primtals funktion, vilken som
 
 # n = int(input("Vilket nummer vill du se är att ett primtal? "))

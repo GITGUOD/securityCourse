@@ -1,4 +1,3 @@
-import math
 import random
 import time
 
@@ -51,6 +50,7 @@ def find_m_and_k(m, exp_also_known_as_k):
     else:
         return find_m_and_k(m // 2, exp_also_known_as_k + 1) # // är heltals division
 
+# Generera 100 primtal med olika bitar, 512, 1024, 2048, 4096
 def generatePrime(bits, nbrPrimes):
     print("Starting generating")
 
@@ -106,15 +106,6 @@ def generateTestPrime(nbrOfTests = 7920):
 # x such that a × x ≡ 1 (mod m)
 # //Find numbers u,v,d such that d=gcd(a,m)=m x u + a x v
 
-# orelevant
-def greatest_common_divider_aka_gcd(m,a):
-    
-    if a != 0:
-        y = m % a #Beräkna resten
-        return greatest_common_divider_aka_gcd(a,y)
-    else:
-            
-        return m
 
 def findExponents(bits):
 
